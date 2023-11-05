@@ -29,6 +29,7 @@ export const registerAction = async (req, res) => {
             password: hashPassword(req.body.password),
         }
         await insertUser(user);
+        req.flash('success', "User successfully registered")
         res.redirect("/login");
     } catch (error) {
         console.log(error);
@@ -37,9 +38,9 @@ export const registerAction = async (req, res) => {
 }
 
 export const logoutAction = async (req, res) => {
-    req.logout((err) => {
-        if (err) {
-            return next(err);
+    req.logout((error) => {
+        if (error) {
+            return next(error);
         }
         res.redirect("/login");
     });

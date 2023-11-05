@@ -1,3 +1,9 @@
 </body>
+<% if(messages.error) { %>
+    <script>toastr.error('<%- messages.error %>')</script>
+<% } %>
+<% if(messages.success) { %>
+    <script>toastr.success('<%- messages.success %>')</script>
+<% } %>
 <script type="application/javascript" src="/js/bootstrap.min.js"></script>
 </html>
