@@ -1,9 +1,11 @@
+import 'dotenv/config';
+
 const config = {
-    db: {
-        host: "127.0.0.1",
-        user: "pavlat",
-        password: "Welcome123",
-        database: "TestDatabase",
+    db:          {
+        host:           process.env.DB_HOST,
+        user:           process.env.DB_USER,
+        password:       process.env.DB_PASS,
+        database:       process.env.DB_NAME,
         connectTimeout: 60000
     },
     listPerPage: 10,
