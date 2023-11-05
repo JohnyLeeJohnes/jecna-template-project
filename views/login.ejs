@@ -1,8 +1,5 @@
 <%- include('partials/header.ejs') %>
 <body>
-<% if(messages.error) { %>
-    <% messages.error %>
-<% } %>
 <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -34,4 +31,7 @@
         </div>
     </div>
 </section>
+<% if(messages.error) { %>
+    <script>toastr.error('<%- messages.error %>')</script>
+<% } %>
 <%- include('partials/footer.ejs') %>

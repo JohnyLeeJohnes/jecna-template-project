@@ -5,6 +5,5 @@ export const hashPassword = (password) => {
 };
 
 export const validatePassword = (password, hash) => {
-    console.log(hashPassword(password), hash);
     return hashPassword(password) === hash;
 };

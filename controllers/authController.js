@@ -1,7 +1,7 @@
 import {hashPassword} from "../service/authentication.js"
-import crypto from "crypto";
-import passport from "passport";
-import {insertUser} from "../model/user.js";
+import {insertUser}   from "../repository/userRepository.js";
+import crypto         from "crypto";
+import passport       from "passport";
 
 export const loginIndexAction = async (req, res) => {
     res.render("login", {title: "Login"});
@@ -15,7 +15,7 @@ export const loginAction = passport.authenticate('local', {
     successRedirect: "/",
     failureRedirect: "/login",
     failureFlash: true,
-}, (e) => console.log(e));
+});
 
 export const registerAction = async (req, res) => {
     try {
@@ -34,10 +34,13 @@ export const registerAction = async (req, res) => {
         console.log(error);
         res.redirect("/register");
     }
-
 }
 
 export const logoutAction = async (req, res) => {
-    req.session.destroy();
-    res.redirect("/login");
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        res.redirect("/login");
+    });
 }
