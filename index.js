@@ -38,10 +38,8 @@ app.use(passport.initialize({}));
 app.use(passport.session({}));
 
 //Load CSS
-app.use('/css', express.static(path.join('node_modules', 'bootstrap', 'dist', 'css')));
-app.use('/js', express.static(path.join('node_modules', 'bootstrap', 'dist', 'js')));
-
-console.log(path.join('node_modules', 'bootstrap', 'dist', 'css'));
+app.use('/css', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')));
+app.use('/js', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'js')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Base routes
@@ -52,7 +50,7 @@ app.post('/login', checkNotAuth, loginAction);
 app.get('/register', checkNotAuth, registerIndexAction);
 app.post('/register', checkNotAuth, registerAction);
 app.get('*', (req, res) => {
-    res.status(404).render("404", {title: "Page not found"})
+    res.status(404).render("util/404", {title: "Page not found"})
 });
 
 app.listen(process.env.APP_PORT, () => {
