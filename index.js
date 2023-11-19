@@ -1,56 +1,30 @@
-import express              from 'express';
-import flash                from "express-flash";
-import sessions             from 'express-session';
-import bodyParser           from 'body-parser';
-import cookieParser         from 'cookie-parser';
-import passport             from "passport";
-import path, {dirname}      from 'path';
-import {fileURLToPath}      from 'url';
-import {rootIndexAction}    from "./controllers/rootController.js";
-import {initPassport}       from "./utils/passport-config.js";
-import {checkAuthenticated} from "./utils/auth.js";
-import authRouter           from "./routes/auth.js"
-import methodOverride       from "method-override";
-import 'dotenv/config';
+import express      from 'express';
+import sessions     from 'express-session';
+import bodyParser   from 'body-parser';
+import cookieParser from 'cookie-parser';
+import authRouter   from "./routes/auth.js"
+import bookRouter   from "./routes/book.js"
 
-//Init Root directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-initPassport(passport);
+//Create & Configure app
+const app  = express();
+const port = 5000;
 
-//Create APP
-const app = express();
-
-//Set engine
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-//Configure APP
 app.use(sessions({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
+    secret:            "jecna-test",
+    resave:            false,
     saveUninitialized: false,
 }))
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-app.use(passport.initialize({}));
-app.use(passport.session({}));
-app.use(methodOverride('_method'))
-app.use(flash());
+app.use(express.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-//Load CSS
-app.use('/css', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')));
-app.use('/js', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'js')));
-app.use(express.static(path.join(__dirname, 'public')));
+//Create endpoints
+app.use('/api/auth', authRouter);
+app.use('/api/book', bookRouter);
+app.get('*', (req, res) => res.status(400).send("Invalid path"));
 
-//Base routes
-app.get('/', checkAuthenticated, rootIndexAction);
-app.use(authRouter);
-app.get('*', (req, res) => {
-    res.status(404).render("util/404", {title: "Page not found"})
-});
-
-app.listen(process.env.APP_PORT, () => {
-    console.log(`Server running on port http://localhost:${process.env.APP_PORT}`)
+app.listen(port, () => {
+    console.log(`Server running on port http://localhost:${port}`)
 })
