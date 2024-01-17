@@ -1,9 +1,12 @@
-import crypto from "crypto";
+const crypto = require("crypto");
 
-export const hashPassword = (password) => {
+const hashPassword = (password) => {
+    if(!password) return "";
     return crypto.pbkdf2Sync(password, '0x00', 1000, 64, "sha512").toString("hex");
 };
 
-export const validatePassword = (password, hash) => {
+const validatePassword = (password, hash) => {
     return hashPassword(password) === hash;
 };
+
+module.exports = {hashPassword, validatePassword};

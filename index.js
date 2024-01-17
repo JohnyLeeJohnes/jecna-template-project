@@ -1,13 +1,13 @@
-import express      from 'express';
-import sessions     from 'express-session';
-import bodyParser   from 'body-parser';
-import cookieParser from 'cookie-parser';
-import authRouter   from "./routes/auth.js"
-import bookRouter   from "./routes/book.js"
+const express      = require('express');
+const sessions     = require('express-session');
+const bodyParser   = require('body-parser');
+const cookieParser = require('cookie-parser');
+const db           = require('./models');
+const authRouter   = require('./routes/auth.js');
 
 //Create & Configure app
 const app  = express();
-const port = 5000;
+const port = 3000;
 
 app.use(sessions({
     secret:            "jecna-test",
@@ -20,11 +20,15 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+//Sync DB
+db.sequelize.sync();
+
 //Create endpoints
 app.use('/api/auth', authRouter);
-app.use('/api/book', bookRouter);
 app.get('*', (req, res) => res.status(400).send("Invalid path"));
 
 app.listen(port, () => {
     console.log(`Server running on port http://localhost:${port}`)
 })
+
+
